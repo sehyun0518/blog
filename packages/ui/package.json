@@ -5,20 +5,20 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
     },
     "./button": {
-      "types": "./dist/components/button.d.ts",
-      "import": "./dist/components/button.js"
+      "types": "./src/components/button.tsx",
+      "import": "./src/components/button.tsx"
     },
     "./card": {
-      "types": "./dist/components/card.d.ts",
-      "import": "./dist/components/card.js"
+      "types": "./src/components/card.tsx",
+      "import": "./src/components/card.tsx"
     },
     "./badge": {
-      "types": "./dist/components/badge.d.ts",
-      "import": "./dist/components/badge.js"
+      "types": "./src/components/badge.tsx",
+      "import": "./src/components/badge.tsx"
     },
     "./globals.css": "./src/globals.css"
   },

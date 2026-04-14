@@ -1,0 +1,6 @@
+/*
+  App-level global styles.
+  All Tailwind v4 tokens and base resets are provided by @blog/ui/globals.css.
+  Add only app-specific overrides below.
+*/
+@import "@blog/ui/globals.css";
