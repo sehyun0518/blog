@@ -1,0 +1,21 @@
+{
+  "name": "blog-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": "10.23.0"
+  },
+  "packageManager": "pnpm@10.23.0",
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean"
+  }
+}

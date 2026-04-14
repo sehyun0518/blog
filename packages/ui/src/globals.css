@@ -1,0 +1,25 @@
+/*
+  Entry CSS for @blog/ui consumers.
+  Import this file in the consuming app's global CSS to load all theme tokens.
+*/
+@import "@blog/config/tailwind";
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    line-height: 1.5;
+  }
+}
