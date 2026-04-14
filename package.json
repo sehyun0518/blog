@@ -8,7 +8,7 @@
   },
   "packageManager": "pnpm@10.23.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": ["esbuild", "sharp"]
   },
   "scripts": {
     "build": "pnpm -r build",

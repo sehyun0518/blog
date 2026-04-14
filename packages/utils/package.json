@@ -5,20 +5,20 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
     },
     "./cn": {
-      "types": "./dist/cn.d.ts",
-      "import": "./dist/cn.js"
+      "types": "./src/cn.ts",
+      "import": "./src/cn.ts"
     },
     "./date": {
-      "types": "./dist/date.d.ts",
-      "import": "./dist/date.js"
+      "types": "./src/date.ts",
+      "import": "./src/date.ts"
     },
     "./string": {
-      "types": "./dist/string.d.ts",
-      "import": "./dist/string.js"
+      "types": "./src/string.ts",
+      "import": "./src/string.ts"
     }
   },
   "scripts": {
