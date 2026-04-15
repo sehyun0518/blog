@@ -1,5 +1,5 @@
 import { Button } from "@blog/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@blog/ui/card";
+import { Card, CardContent, CardHeader } from "@blog/ui/card";
 import { Badge } from "@blog/ui/badge";
 import { formatDate } from "@blog/utils/date";
 
@@ -19,7 +19,9 @@ export default function HomePage(): React.JSX.Element {
         </p>
         <Card className="w-full max-w-2xl">
           <CardHeader>
-            <CardTitle>Getting Started</CardTitle>
+            <h2 className="text-2xl font-semibold leading-none tracking-tight">
+              Getting Started
+            </h2>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
