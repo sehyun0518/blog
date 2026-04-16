@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { siteUrl, siteName, siteDescription } from "@/lib/config";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -22,8 +25,14 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps): React.JSX.Element {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex min-h-screen flex-col">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
