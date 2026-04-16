@@ -54,10 +54,7 @@ function setupFsMocks() {
     return false;
   });
 
-  vi.mocked(fs.readdirSync).mockReturnValue(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Object.keys(MOCK_MDX) as any
-  );
+  vi.mocked(fs.readdirSync).mockReturnValue(Object.keys(MOCK_MDX) as any);
 
   vi.mocked(fs.readFileSync).mockImplementation((filePath) => {
     const filename = String(filePath).split("/").pop() ?? "";
