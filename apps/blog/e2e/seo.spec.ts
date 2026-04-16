@@ -13,7 +13,7 @@ test.describe("SEO & GEO routes", () => {
     const response = await request.get("/robots.txt");
     expect(response.status()).toBe(200);
     const body = await response.text();
-    expect(body).toContain("User-agent");
+    expect(body).toMatch(/User-[Aa]gent/);
     expect(body).toContain("sitemap.xml");
   });
 
