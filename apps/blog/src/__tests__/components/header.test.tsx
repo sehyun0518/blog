@@ -15,6 +15,7 @@ vi.mock("next-themes", () => ({
 vi.mock("@/lib/config", () => ({
   siteName: "Blog",
   siteUrl: "http://localhost:3000",
+  githubUrl: "https://github.com/test",
 }));
 
 import { Header } from "@/components/header";
@@ -30,6 +31,11 @@ describe("Header", () => {
   it("renders the theme toggle button", () => {
     render(<Header />);
     expect(screen.getByRole("button", { name: "Toggle theme" })).toBeInTheDocument();
+  });
+
+  it("renders the GitHub link", () => {
+    render(<Header />);
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/test");
   });
 
   it("renders a header landmark", () => {
