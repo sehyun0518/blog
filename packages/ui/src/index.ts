@@ -16,3 +16,4 @@ export type { BadgeProps } from "./components/badge";
 
 export { TagBadge } from "./components/tag-badge";
 export type { TagBadgeProps } from "./components/tag-badge";
+

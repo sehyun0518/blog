@@ -91,6 +91,12 @@ describe("getAllPostMeta()", () => {
     });
   });
 
+  it("includes readingTime in post meta", () => {
+    const posts = getAllPostMeta();
+    const post = posts.find((p) => p.slug === "hello-world");
+    expect(post?.readingTime).toMatch(/^\d+ min read$/);
+  });
+
   it("normalizes tags to lowercase", () => {
     const raw = MOCK_MDX["hello-world.mdx"]!.replace(
       "  - general\n  - introduction",

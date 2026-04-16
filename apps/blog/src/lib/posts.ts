@@ -2,6 +2,7 @@ import "server-only";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { readingTime } from "@blog/utils/reading-time";
 import { PostFrontmatterSchema, type Post, type PostMeta } from "../types/post";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -34,7 +35,7 @@ function parsePostMeta(filename: string): PostMeta | null {
     const file = readPostFile(filename);
     if (!file) return null;
     const frontmatter = PostFrontmatterSchema.parse(file.data);
-    return { slug, ...frontmatter };
+    return { slug, ...frontmatter, readingTime: readingTime(file.content) };
   } catch {
     return null;
   }
@@ -64,7 +65,7 @@ export function getPostBySlug(slug: string): Post | null {
     const file = readPostFile(filename);
     if (!file) return null;
     const frontmatter = PostFrontmatterSchema.parse(file.data);
-    return { slug, ...frontmatter, content: file.content };
+    return { slug, ...frontmatter, readingTime: readingTime(file.content), content: file.content };
   } catch {
     return null;
   }

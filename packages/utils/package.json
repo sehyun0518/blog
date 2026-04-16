@@ -16,6 +16,10 @@
       "types": "./src/date.ts",
       "import": "./src/date.ts"
     },
+    "./reading-time": {
+      "types": "./src/reading-time.ts",
+      "import": "./src/reading-time.ts"
+    },
     "./string": {
       "types": "./src/string.ts",
       "import": "./src/string.ts"
