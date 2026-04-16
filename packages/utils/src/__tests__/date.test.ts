@@ -22,6 +22,11 @@ describe("formatDate()", () => {
     expect(result).toBe("2026-04-14");
   });
 
+  it("formats a date-only string (YYYY-MM-DD)", () => {
+    const result = formatDate("2026-04-16", "yyyy-MM-dd");
+    expect(result).toBe("2026-04-16");
+  });
+
   it("throws for an invalid date string", () => {
     expect(() => formatDate("not-a-date" as unknown as string)).toThrow();
   });

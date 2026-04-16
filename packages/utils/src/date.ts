@@ -4,6 +4,7 @@ import { z } from "zod";
 const DateInputSchema = z.union([
   z.date(),
   z.string().datetime({ offset: true }),
+  z.string().date(),
   z.number().int().positive(),
 ]);
 
