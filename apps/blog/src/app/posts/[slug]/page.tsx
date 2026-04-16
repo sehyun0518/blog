@@ -5,13 +5,20 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import type { Options as PrettyCodeOptions } from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { Badge } from "@blog/ui/badge";
 import { formatDate } from "@blog/utils/date";
-import { getAllSlugs, getPostBySlug, getSeriesPosts, getRelatedPosts } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getPrevNextPosts, getSeriesPosts, getRelatedPosts } from "@/lib/posts";
 import { buildBlogPostingSchema } from "@/lib/structured-data";
+import { siteUrl } from "@/lib/config";
 import { TableOfContents } from "@/components/toc";
 import { SeriesList } from "@/components/series-list";
 import { RelatedPosts } from "@/components/related-posts";
+import { ShareButtons } from "@/components/share-buttons";
+import { LikeButton } from "@/components/like-button";
+import { PostNavigation } from "@/components/post-navigation";
+import { mdxComponents } from "@/components/mdx";
 
 const prettyCodeOptions: PrettyCodeOptions = {
   theme: "github-dark",
@@ -56,6 +63,8 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) notFound();
 
   const structuredData = buildBlogPostingSchema(post);
+  const { prev, next } = getPrevNextPosts(slug);
+  const postUrl = `${siteUrl}/posts/${slug}`;
   const seriesPosts = post.series ? getSeriesPosts(post.series) : [];
   const relatedPosts = getRelatedPosts(slug);
 
@@ -100,18 +109,29 @@ export default async function PostPage({ params }: PostPageProps) {
           <SeriesList posts={seriesPosts} currentSlug={slug} />
         )}
         <TableOfContents content={post.content} className="mb-8" />
-        <div className="mt-8 space-y-4 leading-7 text-foreground [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_a]:text-primary [&_a]:underline [&_:not(pre)_code]:rounded [&_:not(pre)_code]:bg-muted [&_:not(pre)_code]:px-1.5 [&_:not(pre)_code]:py-0.5 [&_:not(pre)_code]:text-sm [&_figure[data-rehype-pretty-code-figure]]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:text-sm">
+        <div className="prose-custom mt-8 space-y-4 leading-7 text-foreground [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_a]:text-primary [&_a]:underline [&_:not(pre)_code]:rounded [&_:not(pre)_code]:bg-muted [&_:not(pre)_code]:px-1.5 [&_:not(pre)_code]:py-0.5 [&_:not(pre)_code]:text-sm [&_figure[data-rehype-pretty-code-figure]]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:text-sm">
           <MDXRemote
             source={post.content}
+            components={mdxComponents}
             options={{
               mdxOptions: {
-                rehypePlugins: [rehypeSlug, [rehypePrettyCode, prettyCodeOptions]],
+                remarkPlugins: [remarkMath],
+                rehypePlugins: [
+                  rehypeSlug,
+                  rehypeKatex,
+                  [rehypePrettyCode, prettyCodeOptions],
+                ],
               },
             }}
           />
         </div>
+        <footer className="mt-12 flex items-center justify-between border-t border-border pt-6">
+          <LikeButton slug={slug} />
+          <ShareButtons title={post.title} url={postUrl} />
+        </footer>
       </article>
       <RelatedPosts posts={relatedPosts} />
+      <PostNavigation prev={prev} next={next} />
     </main>
   );
 }
