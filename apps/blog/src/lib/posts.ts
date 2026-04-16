@@ -77,6 +77,23 @@ export function getAllTags(): string[] {
   return Array.from(tagSet).sort();
 }
 
+export interface PrevNextPosts {
+  prev: PostMeta | null;
+  next: PostMeta | null;
+}
+
+export function getPrevNextPosts(slug: string): PrevNextPosts {
+  const posts = getAllPostMeta();
+  const index = posts.findIndex((p) => p.slug === slug);
+  if (index === -1) return { prev: null, next: null };
+  // posts sorted descending (newest first)
+  // prev = older (higher index), next = newer (lower index)
+  return {
+    prev: posts[index + 1] ?? null,
+    next: posts[index - 1] ?? null,
+  };
+}
+
 export function getAllSlugs(): string[] {
   if (!fs.existsSync(POSTS_DIR)) return [];
   return fs
