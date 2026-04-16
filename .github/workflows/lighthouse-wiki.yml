@@ -61,10 +61,10 @@ jobs:
         id: scores
         run: |
           avg() { ls .lighthouseci/lhr-*.json | xargs jq "$1" | awk '{s+=$1;c++} END{printf "%.0f",s/c}'; }
-          echo "perf=$(avg '.categories.performance.score*100')"           >> $GITHUB_OUTPUT
-          echo "a11y=$(avg '.categories.accessibility.score*100')"         >> $GITHUB_OUTPUT
-          echo "bp=$(avg '.categories["best-practices"].score*100')"       >> $GITHUB_OUTPUT
-          echo "seo=$(avg '.categories.seo.score*100')"                    >> $GITHUB_OUTPUT
+          echo "perf=$(avg '.categories.performance.score*100')"     >> $GITHUB_OUTPUT
+          echo "a11y=$(avg '.categories.accessibility.score*100')"   >> $GITHUB_OUTPUT
+          echo "bp=$(avg '.categories["best-practices"].score*100')" >> $GITHUB_OUTPUT
+          echo "seo=$(avg '.categories.seo.score*100')"              >> $GITHUB_OUTPUT
 
       - name: Update GitHub Wiki
         env:
@@ -77,86 +77,11 @@ jobs:
           COMMIT_SHA: ${{ github.sha }}
           REPO: ${{ github.repository }}
         run: |
-          # Abort gracefully if wiki is not yet enabled
-          if ! git clone "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.wiki.git" wiki-repo 2>&1; then
-            echo "Wiki not available — skipping update. Enable the wiki for this repository first."
+          if ! git clone "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.wiki.git" wiki-repo; then
+            echo "Wiki not enabled for this repository — skipping update."
             exit 0
           fi
-
-          python3 - << 'PYEOF'
-          import os, json, re
-          from datetime import datetime, timezone
-
-          def emoji(score):
-              s = int(score)
-              return "🟢" if s >= 90 else "🟡" if s >= 50 else "🔴"
-
-          perf  = os.environ["PERF"]
-          a11y  = os.environ["A11Y"]
-          bp    = os.environ["BP"]
-          seo   = os.environ["SEO"]
-          sha   = os.environ["COMMIT_SHA"][:7]
-          repo  = os.environ["REPO"]
-          full_sha = os.environ["COMMIT_SHA"]
-
-          links_raw = os.environ.get("LHCI_LINKS", "{}")
-          try:
-              links = json.loads(links_raw)
-              report_url = next(iter(links.values()), "")
-          except Exception:
-              report_url = ""
-
-          date_str   = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-          commit_url = f"https://github.com/{repo}/commit/{full_sha}"
-          report_line = f"\n- **Full report:** [View on LHCI public storage]({report_url})" if report_url else ""
-
-          # Preserve up to 19 previous history rows (total cap: 20)
-          wiki_path = "wiki-repo/Lighthouse-Reports.md"
-          old_rows = []
-          if os.path.exists(wiki_path):
-              with open(wiki_path) as f:
-                  for line in f:
-                      if re.match(r"^\| \d{4}-\d{2}-\d{2}", line):
-                          old_rows.append(line.rstrip())
-          old_rows = old_rows[:19]
-
-          new_row = (
-              f"| {date_str} | [`{sha}`]({commit_url}) "
-              f"| {emoji(perf)} {perf} "
-              f"| {emoji(a11y)} {a11y} "
-              f"| {emoji(bp)} {bp} "
-              f"| {emoji(seo)} {seo} |"
-          )
-          history = "\n".join([new_row] + old_rows)
-
-          page = f"""# Lighthouse Reports
-
-Automatically updated on every push to `main`.
-
-## Latest
-
-| Category | Score |
-|---|---|
-| Performance | {emoji(perf)} {perf} |
-| Accessibility | {emoji(a11y)} {a11y} |
-| Best Practices | {emoji(bp)} {bp} |
-| SEO | {emoji(seo)} {seo} |
-
-- **Commit:** [`{sha}`]({commit_url})
-- **Date:** {date_str}{report_line}
-
-## History
-
-| Date | Commit | Performance | Accessibility | Best Practices | SEO |
-|---|---|---|---|---|---|
-{history}
-"""
-          with open(wiki_path, "w") as f:
-              f.write(page)
-
-          print(f"Wiki page written: Perf={perf} A11Y={a11y} BP={bp} SEO={seo}")
-          PYEOF
-
+          python3 .github/scripts/update-lighthouse-wiki.py
           cd wiki-repo
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
