@@ -4,3 +4,4 @@
   Add only app-specific overrides below.
 */
 @import "@blog/ui/globals.css";
+@source "../../../../packages/ui/src";
