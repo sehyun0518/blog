@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../components/card.js";
+} from "../components/card";
 
 describe("Card", () => {
   it("renders a div with card base classes", () => {

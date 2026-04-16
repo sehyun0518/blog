@@ -13,6 +13,7 @@
         "categories:accessibility": ["error", { "minScore": 0.9 }],
         "categories:best-practices": ["warn", { "minScore": 0.9 }],
         "categories:seo": ["warn", { "minScore": 0.8 }],
+        "bf-cache": "off",
         "errors-in-console": "off",
         "legacy-javascript": "off",
         "legacy-javascript-insight": "off",

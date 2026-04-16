@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Button } from "../components/button.js";
+import { Button } from "../components/button";
 
 describe("Button", () => {
   it("renders a button element by default", () => {
