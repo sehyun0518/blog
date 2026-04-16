@@ -7,6 +7,7 @@ import { PostFrontmatterSchema, type Post, type PostMeta } from "../types/post";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
+const IS_DEV = process.env.NODE_ENV === "development";
 
 let postCache: PostMeta[] | null = null;
 
@@ -48,6 +49,7 @@ export function getAllPostMeta(): PostMeta[] {
   postCache = files
     .map(parsePostMeta)
     .filter((post): post is PostMeta => post !== null)
+    .filter((post) => IS_DEV || !post.draft)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   return postCache;
 }
@@ -65,6 +67,9 @@ export function getPostBySlug(slug: string): Post | null {
     const file = readPostFile(filename);
     if (!file) return null;
     const frontmatter = PostFrontmatterSchema.parse(file.data);
+
+    if (frontmatter.draft && !IS_DEV) return null;
+
     return { slug, ...frontmatter, readingTime: readingTime(file.content), content: file.content };
   } catch {
     return null;
@@ -83,4 +88,42 @@ export function getAllSlugs(): string[] {
     .readdirSync(POSTS_DIR)
     .filter((f) => /\.mdx?$/.test(f))
     .map((f) => f.replace(/\.mdx?$/, ""));
+}
+
+export interface PrevNextPosts {
+  prev: PostMeta | null;
+  next: PostMeta | null;
+}
+
+export function getPrevNextPosts(slug: string): PrevNextPosts {
+  const posts = getAllPostMeta();
+  const index = posts.findIndex((p) => p.slug === slug);
+  if (index === -1) return { prev: null, next: null };
+  return {
+    prev: posts[index + 1] ?? null,
+    next: posts[index - 1] ?? null,
+  };
+}
+
+export function getSeriesPosts(series: string): PostMeta[] {
+  return getAllPostMeta()
+    .filter((p) => p.series === series)
+    .sort((a, b) => (a.seriesPart ?? 0) - (b.seriesPart ?? 0));
+}
+
+export function getRelatedPosts(slug: string, count = 3): PostMeta[] {
+  const all = getAllPostMeta();
+  const current = all.find((p) => p.slug === slug);
+  if (!current || current.tags.length === 0) return [];
+
+  return all
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({
+      post: p,
+      score: p.tags.filter((t) => current.tags.includes(t)).length,
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, count)
+    .map(({ post }) => post);
 }
