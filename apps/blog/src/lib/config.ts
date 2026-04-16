@@ -4,3 +4,15 @@ export const siteDescription = "A personal blog built with Next.js 15 and shadcn
 export const siteLocale = "en-US";
 export const RSS_FEED_LIMIT = 50;
 export const POSTS_PER_PAGE = 10;
+
+export const giscusConfig = {
+  repo: (process.env.NEXT_PUBLIC_GISCUS_REPO ?? "") as `${string}/${string}`,
+  repoId: process.env.NEXT_PUBLIC_GISCUS_REPO_ID ?? "",
+  category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY ?? "",
+  categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID ?? "",
+} as const;
+
+export function isGiscusEnabled(): boolean {
+  const { repo, repoId, category, categoryId } = giscusConfig;
+  return Boolean(repo && repoId && category && categoryId);
+}
