@@ -1,4 +1,5 @@
 import { getAllPostMeta, getAllTags } from "@/lib/posts";
+import { buildBlogSchema, buildWebSiteSchema } from "@/lib/structured-data";
 import { PostCard } from "@/components/post-card";
 import { TagFilter } from "@/components/tag-filter";
 
@@ -17,8 +18,19 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       ? allPosts.filter((p) => p.tags.includes(normalizedTag))
       : allPosts;
 
+  const websiteSchema = buildWebSiteSchema();
+  const blogSchema = buildBlogSchema();
+
   return (
     <main className="container mx-auto max-w-3xl px-4 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       <h1 className="mb-2 text-4xl font-bold tracking-tight">Blog</h1>
       <p className="mb-8 text-muted-foreground">
         {posts.length} {posts.length === 1 ? "post" : "posts"}

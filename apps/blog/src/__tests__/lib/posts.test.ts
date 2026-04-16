@@ -4,7 +4,7 @@ vi.mock("server-only", () => ({}));
 vi.mock("fs");
 
 import fs from "fs";
-import { getAllPostMeta, getPostBySlug, getAllTags, getAllSlugs } from "@/lib/posts";
+import { getAllPostMeta, getPostBySlug, getAllTags, getAllSlugs, _clearPostCache } from "@/lib/posts";
 
 const MOCK_MDX = {
   "hello-world.mdx": [
@@ -65,7 +65,7 @@ function setupFsMocks() {
 }
 
 describe("getAllPostMeta()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("returns all posts", () => {
     const posts = getAllPostMeta();
@@ -124,7 +124,7 @@ describe("getAllPostMeta()", () => {
 });
 
 describe("getPostBySlug()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("returns post with content for a valid slug", () => {
     const post = getPostBySlug("hello-world");
@@ -136,6 +136,12 @@ describe("getPostBySlug()", () => {
   it("returns null for an unknown slug", () => {
     vi.mocked(fs.existsSync).mockReturnValue(false);
     expect(getPostBySlug("does-not-exist")).toBeNull();
+  });
+
+  it("returns null for path traversal slugs", () => {
+    expect(getPostBySlug("../etc/passwd")).toBeNull();
+    expect(getPostBySlug("..\\windows\\system32")).toBeNull();
+    expect(getPostBySlug("hello/world")).toBeNull();
   });
 
   it("includes all frontmatter fields", () => {
@@ -150,7 +156,7 @@ describe("getPostBySlug()", () => {
 });
 
 describe("getAllTags()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("returns unique tags sorted alphabetically", () => {
     const tags = getAllTags();
@@ -165,7 +171,7 @@ describe("getAllTags()", () => {
 });
 
 describe("getAllSlugs()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("returns all slugs without file extension", () => {
     const slugs = getAllSlugs();
