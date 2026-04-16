@@ -5,6 +5,8 @@ import { siteUrl, siteName, siteDescription } from "@/lib/config";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ReadingProgress } from "@/components/reading-progress";
+import { BackToTop } from "@/components/back-to-top";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -29,9 +31,11 @@ export default function RootLayout({ children }: RootLayoutProps): React.JSX.Ele
     <html lang="en" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ReadingProgress />
           <Header />
           <div className="flex-1">{children}</div>
           <Footer />
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>
