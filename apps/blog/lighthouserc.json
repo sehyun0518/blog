@@ -20,7 +20,9 @@
         "render-blocking-resources": "off",
         "render-blocking-insight": "off",
         "network-dependency-tree-insight": "off",
-        "unused-javascript": ["warn", { "maxLength": 10 }]
+        "unused-javascript": ["warn", { "maxLength": 10 }],
+        "forced-reflow-insight": "off",
+        "forced-reflow": "off"
       }
     },
     "upload": {

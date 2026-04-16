@@ -16,6 +16,7 @@ const MOCK_POST: PostMeta = {
   description: "First post",
   tags: ["general", "introduction"],
   readingTime: "1 min read",
+  draft: false,
 };
 
 describe("buildWebSiteSchema()", () => {

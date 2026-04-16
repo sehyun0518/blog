@@ -18,6 +18,7 @@ const mockPost = (slug: string, title: string): PostMeta => ({
   description: "desc",
   tags: [],
   readingTime: "1 min read",
+  draft: false,
 });
 
 describe("PostNavigation", () => {
