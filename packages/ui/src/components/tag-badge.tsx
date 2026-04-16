@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Badge } from "./badge.js";
+import { Badge } from "./badge";
 import { cn } from "@blog/utils/cn";
 
 export interface TagBadgeProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

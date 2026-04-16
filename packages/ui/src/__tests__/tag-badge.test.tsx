@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { TagBadge } from "../components/tag-badge.js";
+import { TagBadge } from "../components/tag-badge";
 
 describe("TagBadge", () => {
   it("renders the tag text", () => {
