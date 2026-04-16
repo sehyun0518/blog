@@ -7,9 +7,13 @@ import type { Options as PrettyCodeOptions } from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { Badge } from "@blog/ui/badge";
 import { formatDate } from "@blog/utils/date";
-import { getAllSlugs, getPostBySlug } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getPrevNextPosts } from "@/lib/posts";
 import { buildBlogPostingSchema } from "@/lib/structured-data";
+import { siteUrl } from "@/lib/config";
 import { TableOfContents } from "@/components/toc";
+import { ShareButtons } from "@/components/share-buttons";
+import { LikeButton } from "@/components/like-button";
+import { PostNavigation } from "@/components/post-navigation";
 
 const prettyCodeOptions: PrettyCodeOptions = {
   theme: "github-dark",
@@ -53,6 +57,8 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) notFound();
 
   const structuredData = buildBlogPostingSchema(post);
+  const { prev, next } = getPrevNextPosts(slug);
+  const postUrl = `${siteUrl}/posts/${slug}`;
 
   return (
     <main className="container mx-auto max-w-3xl px-4 py-16">
@@ -94,7 +100,12 @@ export default async function PostPage({ params }: PostPageProps) {
             }}
           />
         </div>
+        <footer className="mt-12 flex items-center justify-between border-t border-border pt-6">
+          <LikeButton slug={slug} />
+          <ShareButtons title={post.title} url={postUrl} />
+        </footer>
       </article>
+      <PostNavigation prev={prev} next={next} />
     </main>
   );
 }
