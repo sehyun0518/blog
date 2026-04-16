@@ -1,6 +1,5 @@
-import type { PostMeta } from "@/types/post";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import type { Post, PostMeta } from "@/types/post";
+import { siteUrl, siteName, siteDescription, siteLocale } from "./config";
 
 export interface WebSiteSchema {
   "@context": "https://schema.org";
@@ -25,7 +24,12 @@ export interface BlogPostingSchema {
   description: string;
   datePublished: string;
   url: string;
+  inLanguage: string;
   keywords: string[];
+  mainEntityOfPage: {
+    "@type": "WebPage";
+    "@id": string;
+  };
   author: {
     "@type": "Person";
     name: string;
@@ -41,9 +45,9 @@ export function buildWebSiteSchema(): WebSiteSchema {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Blog",
+    name: siteName,
     url: siteUrl,
-    description: "A personal blog built with Next.js 15 and shadcn/ui.",
+    description: siteDescription,
   };
 }
 
@@ -51,28 +55,34 @@ export function buildBlogSchema(): BlogSchema {
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Blog",
+    name: siteName,
     url: siteUrl,
-    description: "A personal blog built with Next.js 15 and shadcn/ui.",
+    description: siteDescription,
   };
 }
 
-export function buildBlogPostingSchema(post: PostMeta): BlogPostingSchema {
+export function buildBlogPostingSchema(post: Post | PostMeta): BlogPostingSchema {
+  const postUrl = `${siteUrl}/posts/${post.slug}`;
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    url: `${siteUrl}/posts/${post.slug}`,
+    url: postUrl,
+    inLanguage: siteLocale,
     keywords: post.tags,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
     author: {
       "@type": "Person",
-      name: "Blog Author",
+      name: siteName,
     },
     publisher: {
       "@type": "Organization",
-      name: "Blog",
+      name: siteName,
       url: siteUrl,
     },
   };

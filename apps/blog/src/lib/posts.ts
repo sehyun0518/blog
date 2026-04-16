@@ -5,6 +5,17 @@ import matter from "gray-matter";
 import { PostFrontmatterSchema, type Post, type PostMeta } from "../types/post";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
+const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
+
+let postCache: PostMeta[] | null = null;
+
+export function _clearPostCache(): void {
+  postCache = null;
+}
+
+function isValidSlug(slug: string): boolean {
+  return SLUG_RE.test(slug);
+}
 
 function readPostFile(filename: string): { data: Record<string, unknown>; content: string } | null {
   try {
@@ -30,15 +41,18 @@ function parsePostMeta(filename: string): PostMeta | null {
 }
 
 export function getAllPostMeta(): PostMeta[] {
+  if (postCache) return postCache;
   if (!fs.existsSync(POSTS_DIR)) return [];
   const files = fs.readdirSync(POSTS_DIR).filter((f) => /\.mdx?$/.test(f));
-  return files
+  postCache = files
     .map(parsePostMeta)
     .filter((post): post is PostMeta => post !== null)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return postCache;
 }
 
 export function getPostBySlug(slug: string): Post | null {
+  if (!isValidSlug(slug)) return null;
   try {
     const mdxPath = path.join(POSTS_DIR, `${slug}.mdx`);
     const mdPath = path.join(POSTS_DIR, `${slug}.md`);

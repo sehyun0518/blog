@@ -1,9 +1,10 @@
 import { getAllPostMeta } from "./posts";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { siteUrl, siteName, siteDescription, RSS_FEED_LIMIT } from "./config";
 
 function escapeXml(text: string): string {
-  return text
+  // Strip XML 1.0 control characters (invalid in XML 1.0 except \t \n \r)
+  const sanitized = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+  return sanitized
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -12,7 +13,7 @@ function escapeXml(text: string): string {
 }
 
 export function buildFeed(): string {
-  const posts = getAllPostMeta();
+  const posts = getAllPostMeta().slice(0, RSS_FEED_LIMIT);
   const lastBuildDate = posts[0]
     ? new Date(posts[0].date).toUTCString()
     : new Date().toUTCString();
@@ -43,9 +44,9 @@ export function buildFeed(): string {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     "  <channel>",
-    "    <title>Blog</title>",
+    `    <title>${escapeXml(siteName)}</title>`,
     `    <link>${siteUrl}</link>`,
-    "    <description>A personal blog built with Next.js 15 and shadcn/ui.</description>",
+    `    <description>${escapeXml(siteDescription)}</description>`,
     "    <language>en</language>",
     `    <lastBuildDate>${lastBuildDate}</lastBuildDate>`,
     `    <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml"/>`,

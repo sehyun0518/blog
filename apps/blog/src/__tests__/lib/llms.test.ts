@@ -5,6 +5,7 @@ vi.mock("fs");
 
 import fs from "fs";
 import { buildLlmsTxt } from "@/lib/llms";
+import { _clearPostCache } from "@/lib/posts";
 
 const MOCK_MDX: Record<string, string> = {
   "hello-world.mdx": [
@@ -52,7 +53,7 @@ function setupFsMocks() {
 }
 
 describe("buildLlmsTxt()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("starts with the blog title as h1", () => {
     const txt = buildLlmsTxt();

@@ -5,6 +5,7 @@ vi.mock("fs");
 
 import fs from "fs";
 import { buildFeed } from "@/lib/feed";
+import { _clearPostCache } from "@/lib/posts";
 
 const MOCK_MDX: Record<string, string> = {
   "hello-world.mdx": [
@@ -51,7 +52,7 @@ function setupFsMocks() {
 }
 
 describe("buildFeed()", () => {
-  beforeEach(setupFsMocks);
+  beforeEach(() => { _clearPostCache(); setupFsMocks(); });
 
   it("returns a valid RSS 2.0 XML string", () => {
     const feed = buildFeed();

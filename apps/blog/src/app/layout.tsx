@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { siteUrl, siteName, siteDescription } from "@/lib/config";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Blog", template: "%s | Blog" },
-  description: "A personal blog built with Next.js 15 and shadcn/ui.",
+  title: { default: siteName, template: `%s | ${siteName}` },
+  description: siteDescription,
   openGraph: {
     type: "website",
-    siteName: "Blog",
+    siteName,
     locale: "en_US",
   },
   twitter: {

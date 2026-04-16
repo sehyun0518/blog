@@ -1,6 +1,5 @@
 import { getAllPostMeta } from "./posts";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { siteUrl, siteName, siteDescription } from "./config";
 
 export function buildLlmsTxt(): string {
   const posts = getAllPostMeta();
@@ -14,9 +13,9 @@ export function buildLlmsTxt(): string {
     .join("\n");
 
   return [
-    "# Blog",
+    `# ${siteName}`,
     "",
-    "> A personal blog built with Next.js 15 and shadcn/ui.",
+    `> ${siteDescription}`,
     "",
     `URL: ${siteUrl}`,
     `Feed: ${siteUrl}/feed.xml`,

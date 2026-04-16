@@ -59,6 +59,17 @@ describe("buildBlogPostingSchema()", () => {
     expect(schema.url).toContain(MOCK_POST.slug);
   });
 
+  it("includes inLanguage", () => {
+    const schema = buildBlogPostingSchema(MOCK_POST);
+    expect(schema.inLanguage).toBe("en-US");
+  });
+
+  it("includes mainEntityOfPage pointing to post URL", () => {
+    const schema = buildBlogPostingSchema(MOCK_POST);
+    expect(schema.mainEntityOfPage["@type"]).toBe("WebPage");
+    expect(schema.mainEntityOfPage["@id"]).toContain(MOCK_POST.slug);
+  });
+
   it("includes author and publisher", () => {
     const schema = buildBlogPostingSchema(MOCK_POST);
     expect(schema.author["@type"]).toBe("Person");
