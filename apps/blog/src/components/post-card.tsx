@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@blog/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@blog/ui/card";
 import { Badge } from "@blog/ui/badge";
 import { formatDate } from "@blog/utils/date";
 import type { PostMeta } from "../types/post";
@@ -22,7 +22,7 @@ export function PostCard({ post }: PostCardProps) {
           >
             {formatDate(post.date)}
           </time>
-          <CardTitle className="text-xl">{post.title}</CardTitle>
+          <h2 className="text-xl font-semibold leading-none tracking-tight">{post.title}</h2>
           <CardDescription>{post.description}</CardDescription>
         </CardHeader>
         {post.tags.length > 0 && (
