@@ -8,12 +8,13 @@ interface HomePageProps {
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const { tag } = await searchParams;
+  const normalizedTag = tag?.toLowerCase().trim();
   const allPosts = getAllPostMeta();
   const tags = getAllTags();
 
   const posts =
-    tag !== undefined
-      ? allPosts.filter((p) => p.tags.includes(tag))
+    normalizedTag !== undefined
+      ? allPosts.filter((p) => p.tags.includes(normalizedTag))
       : allPosts;
 
   return (
@@ -21,9 +22,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <h1 className="mb-2 text-4xl font-bold tracking-tight">Blog</h1>
       <p className="mb-8 text-muted-foreground">
         {posts.length} {posts.length === 1 ? "post" : "posts"}
-        {tag !== undefined ? ` tagged "${tag}"` : ""}
+        {normalizedTag !== undefined ? ` tagged "${normalizedTag}"` : ""}
       </p>
-      <TagFilter tags={tags} activeTag={tag} />
+      <TagFilter tags={tags} activeTag={normalizedTag} />
       {posts.length > 0 ? (
         <ul className="mt-8 flex flex-col gap-6">
           {posts.map((post) => (

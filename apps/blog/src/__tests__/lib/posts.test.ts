@@ -91,6 +91,32 @@ describe("getAllPostMeta()", () => {
     });
   });
 
+  it("normalizes tags to lowercase", () => {
+    const raw = MOCK_MDX["hello-world.mdx"]!.replace(
+      "  - general\n  - introduction",
+      "  - General\n  - Introduction"
+    );
+    vi.mocked(fs.readFileSync).mockImplementation((filePath) => {
+      const filename = String(filePath).split("/").pop() ?? "";
+      if (filename === "hello-world.mdx") return raw;
+      return MOCK_MDX[filename as keyof typeof MOCK_MDX] ?? "";
+    });
+    const posts = getAllPostMeta();
+    const post = posts.find((p) => p.slug === "hello-world");
+    expect(post?.tags).toEqual(["general", "introduction"]);
+  });
+
+  it("skips malformed posts without crashing", () => {
+    vi.mocked(fs.readFileSync).mockImplementation((filePath) => {
+      const filename = String(filePath).split("/").pop() ?? "";
+      if (filename === "hello-world.mdx") throw new Error("disk error");
+      return MOCK_MDX[filename as keyof typeof MOCK_MDX] ?? "";
+    });
+    const posts = getAllPostMeta();
+    expect(posts.every((p) => p.slug !== "hello-world")).toBe(true);
+    expect(posts.length).toBe(2);
+  });
+
   it("returns empty array when posts directory does not exist", () => {
     vi.mocked(fs.existsSync).mockReturnValue(false);
     expect(getAllPostMeta()).toEqual([]);
