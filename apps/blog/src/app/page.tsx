@@ -1,38 +1,40 @@
-import { Button } from "@blog/ui/button";
-import { Card, CardContent, CardHeader } from "@blog/ui/card";
-import { Badge } from "@blog/ui/badge";
-import { formatDate } from "@blog/utils/date";
+import { getAllPostMeta, getAllTags } from "@/lib/posts";
+import { PostCard } from "@/components/post-card";
+import { TagFilter } from "@/components/tag-filter";
 
-export default function HomePage(): React.JSX.Element {
-  const today = formatDate(new Date());
+interface HomePageProps {
+  searchParams: Promise<{ tag?: string }>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const { tag } = await searchParams;
+  const allPosts = getAllPostMeta();
+  const tags = getAllTags();
+
+  const posts =
+    tag !== undefined
+      ? allPosts.filter((p) => p.tags.includes(tag))
+      : allPosts;
 
   return (
-    <main className="container mx-auto px-4 py-16">
-      <section className="flex flex-col items-start gap-6">
-        <Badge variant="secondary">Now live</Badge>
-        <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          Welcome to the Blog
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Published on{" "}
-          <time dateTime={new Date().toISOString()}>{today}</time>
-        </p>
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <h2 className="text-2xl font-semibold leading-none tracking-tight">
-              Getting Started
-            </h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              This is your new Next.js 15 blog. Start writing posts.
-            </p>
-            <Button className="mt-4" variant="default">
-              Read more
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
+    <main className="container mx-auto max-w-3xl px-4 py-16">
+      <h1 className="mb-2 text-4xl font-bold tracking-tight">Blog</h1>
+      <p className="mb-8 text-muted-foreground">
+        {posts.length} {posts.length === 1 ? "post" : "posts"}
+        {tag !== undefined ? ` tagged "${tag}"` : ""}
+      </p>
+      <TagFilter tags={tags} activeTag={tag} />
+      {posts.length > 0 ? (
+        <ul className="mt-8 flex flex-col gap-6">
+          {posts.map((post) => (
+            <li key={post.slug}>
+              <PostCard post={post} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-8 text-muted-foreground">No posts found.</p>
+      )}
     </main>
   );
 }

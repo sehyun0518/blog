@@ -1,0 +1,56 @@
+---
+title: "Understanding Next.js App Router"
+date: "2026-04-10"
+description: "A deep dive into the Next.js 15 App Router, Server Components, and data fetching patterns."
+tags: ["nextjs", "react", "server-components"]
+---
+
+Next.js 15 App Router introduces a new paradigm for building web applications with React Server Components at the core.
+
+## Server Components by default
+
+Every component in the `app/` directory is a Server Component by default. This means they run on the server and can directly access databases, file systems, and other server-side resources.
+
+```tsx
+// This runs on the server — no client-side JavaScript sent
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const post = await getPostBySlug(params.slug);
+  return <article>{post.title}</article>;
+}
+```
+
+## When to use Client Components
+
+Add `"use client"` when you need:
+
+- Event handlers (`onClick`, `onChange`)
+- Browser APIs (`localStorage`, `window`)
+- React hooks (`useState`, `useEffect`)
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+## Data fetching
+
+Server Components can `async/await` directly without `useEffect` or SWR:
+
+```tsx
+async function PostList() {
+  const posts = await getAllPostMeta(); // direct server call
+  return (
+    <ul>
+      {posts.map((p) => <li key={p.slug}>{p.title}</li>)}
+    </ul>
+  );
+}
+```
+
+This keeps data fetching close to the component that uses it, reducing waterfalls and improving performance.

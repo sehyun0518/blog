@@ -20,6 +20,10 @@
       "types": "./src/components/badge.tsx",
       "import": "./src/components/badge.tsx"
     },
+    "./tag-badge": {
+      "types": "./src/components/tag-badge.tsx",
+      "import": "./src/components/tag-badge.tsx"
+    },
     "./globals.css": "./src/globals.css"
   },
   "scripts": {

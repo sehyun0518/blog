@@ -1,0 +1,69 @@
+---
+title: "Building a pnpm Monorepo"
+date: "2026-04-04"
+description: "How to structure a pnpm workspace monorepo with shared packages for UI, utilities, and config."
+tags: ["monorepo", "pnpm", "typescript"]
+---
+
+A monorepo lets you manage multiple packages in a single repository. With pnpm workspaces, shared code lives in `packages/` and is consumed by apps in `apps/`.
+
+## Workspace structure
+
+```
+blog/
+├── apps/
+│   └── blog/          # Next.js application
+├── packages/
+│   ├── ui/            # Shared React components
+│   ├── utils/         # Utility functions
+│   └── config/        # ESLint, TypeScript, Tailwind configs
+└── pnpm-workspace.yaml
+```
+
+## pnpm-workspace.yaml
+
+```yaml
+packages:
+  - "apps/*"
+  - "packages/*"
+```
+
+## Referencing workspace packages
+
+Use the `workspace:*` protocol in `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@blog/ui": "workspace:*",
+    "@blog/utils": "workspace:*"
+  }
+}
+```
+
+## Shared TypeScript config
+
+Extend a base `tsconfig.json` from `packages/config`:
+
+```json
+{
+  "extends": "@blog/config/tsconfig/nextjs.json",
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
+```
+
+This ensures consistent compiler settings across all packages without duplication.
+
+## Running commands
+
+```bash
+# Run dev in a specific package
+pnpm --filter @blog/blog dev
+
+# Run tests across all packages
+pnpm -r test
+
+# Install a dependency in a specific package
+pnpm add zod --filter @blog/utils
+```
