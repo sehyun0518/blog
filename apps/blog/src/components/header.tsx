@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { siteName } from "@/lib/config";
+import { Github } from "lucide-react";
+import { siteName, githubUrl } from "@/lib/config";
 import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
@@ -12,7 +13,18 @@ export function Header() {
         >
           {siteName}
         </Link>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Github className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

@@ -4,3 +4,5 @@ export const siteDescription = "A personal blog built with Next.js 15 and shadcn
 export const siteLocale = "en-US";
 export const RSS_FEED_LIMIT = 50;
 export const POSTS_PER_PAGE = 10;
+
+export const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com";

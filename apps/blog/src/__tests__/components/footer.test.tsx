@@ -8,6 +8,10 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+vi.mock("@/lib/config", () => ({
+  githubUrl: "https://github.com/test",
+}));
+
 import { Footer } from "@/components/footer";
 
 describe("Footer", () => {
@@ -19,9 +23,12 @@ describe("Footer", () => {
 
   it("renders RSS feed link", () => {
     render(<Footer />);
-    const link = screen.getByRole("link", { name: "RSS" });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "/feed.xml");
+    expect(screen.getByRole("link", { name: "RSS" })).toHaveAttribute("href", "/feed.xml");
+  });
+
+  it("renders GitHub link", () => {
+    render(<Footer />);
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/test");
   });
 
   it("renders footer landmark", () => {
