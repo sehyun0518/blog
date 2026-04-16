@@ -13,6 +13,7 @@ export type PostFrontmatter = z.infer<typeof PostFrontmatterSchema>;
 
 export interface PostMeta extends PostFrontmatter {
   slug: string;
+  readingTime: string;
 }
 
 export interface Post extends PostMeta {

@@ -16,12 +16,11 @@ export function PostCard({ post }: PostCardProps) {
     >
       <Card>
         <CardHeader>
-          <time
-            dateTime={post.date}
-            className="text-sm text-muted-foreground"
-          >
-            {formatDate(post.date)}
-          </time>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <span aria-hidden="true">&middot;</span>
+            <span>{post.readingTime}</span>
+          </div>
           <h2 className="text-xl font-semibold leading-none tracking-tight">{post.title}</h2>
           <CardDescription>{post.description}</CardDescription>
         </CardHeader>
