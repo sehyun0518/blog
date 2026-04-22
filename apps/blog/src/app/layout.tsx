@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName,
-    locale: "en_US",
+    locale: "ko_KR",
   },
   twitter: {
     card: "summary_large_image",
@@ -28,7 +28,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps): React.JSX.Element {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ReadingProgress />

@@ -33,7 +33,7 @@ describe("Comments", () => {
 
   it("renders the Comments heading", () => {
     render(<Comments />);
-    expect(screen.getByRole("heading", { name: "Comments" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "댓글" })).toBeInTheDocument();
   });
 
   it("renders the giscus widget", () => {
@@ -54,6 +54,6 @@ describe("Comments", () => {
 
   it("renders a section landmark", () => {
     render(<Comments />);
-    expect(screen.getByRole("region", { name: "Comments" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "댓글" })).toBeInTheDocument();
   });
 });

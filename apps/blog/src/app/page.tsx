@@ -60,9 +60,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       />
       <h1 className="mb-2 text-4xl font-bold tracking-tight">Blog</h1>
       <p className="mb-8 text-muted-foreground">
-        {filteredPosts.length} {filteredPosts.length === 1 ? "post" : "posts"}
-        {normalizedTag !== undefined ? ` tagged "${normalizedTag}"` : ""}
-        {query ? ` matching "${query}"` : ""}
+        {filteredPosts.length}개의 포스트
+        {normalizedTag !== undefined ? ` — "${normalizedTag}" 태그` : ""}
+        {query ? ` — "${query}" 검색 결과` : ""}
       </p>
       <div className="flex flex-col gap-4">
         <Suspense>
@@ -84,7 +84,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </div>
         </>
       ) : (
-        <p className="mt-8 text-muted-foreground">No posts found.</p>
+        <p className="mt-8 text-muted-foreground">포스트를 찾을 수 없습니다.</p>
       )}
     </main>
   );

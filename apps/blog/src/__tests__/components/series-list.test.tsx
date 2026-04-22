@@ -34,7 +34,7 @@ describe("SeriesList", () => {
 
   it("renders series name", () => {
     render(<SeriesList posts={posts} currentSlug="part-1" />);
-    expect(screen.getByText("Series: Test Series")).toBeInTheDocument();
+    expect(screen.getByText("시리즈: Test Series")).toBeInTheDocument();
   });
 
   it("renders all post titles", () => {

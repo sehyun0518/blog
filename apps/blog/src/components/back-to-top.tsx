@@ -29,7 +29,7 @@ export function BackToTop() {
       onClick={scrollToTop}
       variant="outline"
       size="icon"
-      aria-label="Back to top"
+      aria-label="맨 위로"
       className="fixed bottom-6 right-6 z-40 shadow-md"
     >
       <ArrowUp className="h-4 w-4" aria-hidden="true" />

@@ -8,7 +8,7 @@ interface SearchInputProps {
   placeholder?: string;
 }
 
-export function SearchInput({ placeholder = "Search posts..." }: SearchInputProps) {
+export function SearchInput({ placeholder = "포스트 검색..." }: SearchInputProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -35,7 +35,7 @@ export function SearchInput({ placeholder = "Search posts..." }: SearchInputProp
         placeholder={placeholder}
         defaultValue={searchParams.get("q") ?? ""}
         onChange={handleChange}
-        aria-label="Search posts"
+        aria-label="포스트 검색"
         className="w-full rounded-md border border-border bg-background py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
       />
     </div>

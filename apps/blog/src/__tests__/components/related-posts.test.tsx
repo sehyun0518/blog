@@ -34,7 +34,7 @@ describe("RelatedPosts", () => {
 
   it("renders Related Posts heading", () => {
     render(<RelatedPosts posts={[makePost("post-a", "Post A")]} />);
-    expect(screen.getByRole("heading", { name: "Related Posts" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "관련 포스트" })).toBeInTheDocument();
   });
 
   it("renders post titles as links", () => {

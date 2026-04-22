@@ -63,7 +63,7 @@ describe("buildBlogPostingSchema()", () => {
 
   it("includes inLanguage", () => {
     const schema = buildBlogPostingSchema(MOCK_POST);
-    expect(schema.inLanguage).toBe("en-US");
+    expect(schema.inLanguage).toBe("ko-KR");
   });
 
   it("includes mainEntityOfPage pointing to post URL", () => {

@@ -30,21 +30,21 @@ describe("Pagination", () => {
 
   it("renders next link when not on last page", () => {
     render(<Pagination page={1} totalPages={3} buildHref={buildHref} />);
-    expect(screen.getByRole("link", { name: "Next page" })).toHaveAttribute("href", "/?page=2");
+    expect(screen.getByRole("link", { name: "다음 페이지" })).toHaveAttribute("href", "/?page=2");
   });
 
   it("renders prev link when not on first page", () => {
     render(<Pagination page={3} totalPages={5} buildHref={buildHref} />);
-    expect(screen.getByRole("link", { name: "Previous page" })).toHaveAttribute("href", "/?page=2");
+    expect(screen.getByRole("link", { name: "이전 페이지" })).toHaveAttribute("href", "/?page=2");
   });
 
   it("disables prev on first page", () => {
     render(<Pagination page={1} totalPages={3} buildHref={buildHref} />);
-    expect(screen.queryByRole("link", { name: "Previous page" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "이전 페이지" })).toBeNull();
   });
 
   it("disables next on last page", () => {
     render(<Pagination page={3} totalPages={3} buildHref={buildHref} />);
-    expect(screen.queryByRole("link", { name: "Next page" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "다음 페이지" })).toBeNull();
   });
 });

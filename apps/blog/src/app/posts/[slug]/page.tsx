@@ -83,7 +83,7 @@ export default async function PostPage({ params }: PostPageProps) {
         href="/"
         className="mb-8 inline-block text-sm text-muted-foreground hover:text-foreground"
       >
-        &larr; Back to all posts
+        &larr; 전체 포스트
       </Link>
       <article>
         <header className="mb-8">
@@ -101,7 +101,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <>
                 <span aria-hidden="true">&middot;</span>
                 <span>
-                  Updated <time dateTime={post.updatedAt}>{formatDate(post.updatedAt)}</time>
+                  수정 <time dateTime={post.updatedAt}>{formatDate(post.updatedAt)}</time>
                 </span>
               </>
             )}

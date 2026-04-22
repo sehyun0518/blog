@@ -23,7 +23,7 @@ export function PostNavigation({ prev, next }: PostNavigationProps) {
           >
             <span className="flex items-center gap-1 text-muted-foreground transition-colors group-hover:text-foreground">
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              Previous
+              이전 글
             </span>
             <span className="font-medium text-foreground line-clamp-2 group-hover:underline">
               {prev.title}
@@ -38,7 +38,7 @@ export function PostNavigation({ prev, next }: PostNavigationProps) {
             className="group flex flex-col gap-1 text-sm items-end"
           >
             <span className="flex items-center gap-1 text-muted-foreground transition-colors group-hover:text-foreground">
-              Next
+              다음 글
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </span>
             <span className="font-medium text-foreground line-clamp-2 group-hover:underline">
