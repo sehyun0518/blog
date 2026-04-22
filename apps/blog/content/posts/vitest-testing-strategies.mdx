@@ -1,0 +1,173 @@
+---
+title: "Testing Strategies with Vitest in a Next.js Monorepo"
+date: "2026-04-14"
+description: "How to structure unit, integration, and component tests across a pnpm monorepo using Vitest — with practical patterns for mocking, coverage, and test isolation."
+tags: ["testing", "vitest", "nextjs", "monorepo"]
+---
+
+Tests in a monorepo have one structural challenge: the same module may be tested at three levels — as a library unit in `packages/`, as a server module in `apps/blog/`, and as a rendered component via Testing Library. Getting the boundaries right prevents both over-mocking and under-mocking.
+
+## Project Structure for Tests
+
+```
+apps/blog/src/
+├── __tests__/
+│   ├── setup.ts          # global mocks and matchers
+│   ├── lib/
+│   │   └── posts.test.ts # unit tests for server lib
+│   └── components/
+│       └── post-card.test.tsx
+packages/utils/src/
+└── __tests__/
+    └── reading-time.test.ts
+```
+
+Co-locating tests with their source is also valid. The key constraint: tests in `packages/` must not import from `apps/`. The dependency graph is unidirectional.
+
+## Vitest Configuration
+
+Each package needs its own `vitest.config.ts`. Shared settings go in a base config:
+
+```typescript
+// packages/config/vitest/base.ts
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    environment: "node",
+    coverage: {
+      provider: "v8",
+      thresholds: { lines: 80, functions: 80, branches: 80 },
+    },
+  },
+});
+```
+
+The Next.js app extends this with path aliases and JSDOM:
+
+```typescript
+// apps/blog/vitest.config.ts
+import { defineConfig, mergeConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import base from "@blog/config/vitest/base";
+import tsconfigPaths from "vite-tsconfig-paths";
+
+export default mergeConfig(
+  base,
+  defineConfig({
+    plugins: [react(), tsconfigPaths()],
+    test: {
+      environment: "jsdom",
+      setupFiles: ["./src/__tests__/setup.ts"],
+    },
+  })
+);
+```
+
+## Mocking Server-Only Modules
+
+Next.js marks some modules as server-only to prevent accidental client-side imports. Vitest does not understand this constraint, so tests that import server modules need a mock:
+
+```typescript
+// src/__tests__/setup.ts
+vi.mock("server-only", () => ({}));
+```
+
+For `fs`-dependent modules like the posts library, mock at the module level:
+
+```typescript
+vi.mock("fs");
+
+import fs from "fs";
+
+beforeEach(() => {
+  vi.mocked(fs.existsSync).mockReturnValue(true);
+  vi.mocked(fs.readdirSync).mockReturnValue(["hello-world.mdx"] as any);
+  vi.mocked(fs.readFileSync).mockReturnValue(FIXTURE_MDX);
+});
+```
+
+The fixture MDX is a plain string constant at the top of the test file — no separate file needed for small payloads.
+
+## Testing React Server Components
+
+Server Components cannot be rendered in JSDOM — they may have `async` bodies, call server APIs, or import `server-only` modules. Test them by testing the functions they call, not the component itself.
+
+For Client Components, use Testing Library:
+
+```typescript
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { PostCard } from "@/components/post-card";
+
+const POST: PostMeta = {
+  slug: "hello-world",
+  title: "Hello World",
+  date: "2026-04-16",
+  description: "First post",
+  tags: ["general"],
+  readingTime: "1 min read",
+  draft: false,
+};
+
+it("renders title as a link", () => {
+  render(<PostCard post={POST} />);
+  const link = screen.getByRole("link", { name: "Hello World" });
+  expect(link).toHaveAttribute("href", "/posts/hello-world");
+});
+```
+
+## Integration Tests for API Routes
+
+API route handlers are plain functions. Test them by calling them directly with a `NextRequest`:
+
+```typescript
+import { GET } from "@/app/api/health/route";
+import { NextRequest } from "next/server";
+
+it("returns 200 with status ok", async () => {
+  const request = new NextRequest("http://localhost/api/health");
+  const response = await GET(request);
+  const body = await response.json();
+
+  expect(response.status).toBe(200);
+  expect(body.success).toBe(true);
+  expect(body.data.status).toBe("ok");
+});
+```
+
+No HTTP server needed. The handlers are just async functions — treat them that way.
+
+## Coverage Boundaries
+
+80% line coverage is a floor, not a goal. The meaningful question is: which behaviors are unverified?
+
+Prioritize coverage for:
+- **Parsing and validation** (frontmatter, env vars, API inputs) — edge cases are expensive when they fail in production
+- **Branching logic** (draft posts, missing fields, error paths)
+- **Security boundaries** (slug sanitization, CSRF checks)
+
+Do not chase coverage in:
+- Pure layout components with no logic
+- Type-only files
+- Generated code
+
+A coverage report that shows 95% but misses the CSRF validation branch is worse than one showing 78% that covers every security-critical path.
+
+## Running Tests in the Monorepo
+
+```bash
+# All packages
+pnpm -r test
+
+# Single app
+pnpm --filter @blog/blog test
+
+# Watch mode for active development
+pnpm --filter @blog/blog test:watch
+
+# Coverage report
+pnpm --filter @blog/blog test:coverage
+```
+
+The `-r` flag (recursive) runs the `test` script in every package that defines one. Configure this in the root `package.json` for a single command that CI can run.

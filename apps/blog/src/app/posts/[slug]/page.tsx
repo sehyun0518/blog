@@ -19,6 +19,8 @@ import { ShareButtons } from "@/components/share-buttons";
 import { LikeButton } from "@/components/like-button";
 import { PostNavigation } from "@/components/post-navigation";
 import { mdxComponents } from "@/components/mdx";
+import { Comments } from "@/components/comments";
+import { isGiscusEnabled } from "@/lib/config";
 
 const prettyCodeOptions: PrettyCodeOptions = {
   theme: "github-dark",
@@ -131,6 +133,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </footer>
       </article>
       <RelatedPosts posts={relatedPosts} />
+      {isGiscusEnabled() && <Comments />}
       <PostNavigation prev={prev} next={next} />
     </main>
   );
