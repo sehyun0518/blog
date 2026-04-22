@@ -23,8 +23,11 @@ import { Comments } from "@/components/comments";
 import { isGiscusEnabled } from "@/lib/config";
 
 const prettyCodeOptions: PrettyCodeOptions = {
-  theme: "github-dark",
-  keepBackground: true,
+  theme: {
+    light: "github-light",
+    dark: "github-dark",
+  },
+  keepBackground: false,
 };
 
 interface PostPageProps {

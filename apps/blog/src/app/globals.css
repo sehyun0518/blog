@@ -5,3 +5,43 @@
 */
 @import "@blog/ui/globals.css";
 @source "../../../../packages/ui/src";
+
+/*
+  rehype-pretty-code dual theme (github-light / github-dark).
+
+  Shiki writes per-token colors as CSS custom properties:
+    --shiki-light / --shiki-light-bg   (light theme values)
+    --shiki-dark  / --shiki-dark-bg    (dark theme values)
+
+  Dual-theme elements carry data-theme="github-light github-dark".
+  We use the ~= (whitespace-separated word) attribute selector to avoid
+  embedding a literal space inside quotes, which breaks cssnano-simple
+  in Next.js 15's production build.
+
+  We select the right set based on the .dark class that next-themes
+  places on <html>.
+*/
+
+/* Light mode — default */
+code[data-theme~="github-light"],
+code[data-theme~="github-light"] span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+pre[data-theme~="github-light"] {
+  background-color: var(--shiki-light-bg);
+  border: 1px solid var(--color-border);
+}
+
+/* Dark mode — .dark class on <html> */
+.dark code[data-theme~="github-dark"],
+.dark code[data-theme~="github-dark"] span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+.dark pre[data-theme~="github-dark"] {
+  background-color: var(--shiki-dark-bg);
+  border: 1px solid var(--color-border);
+}
