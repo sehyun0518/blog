@@ -14,13 +14,13 @@ test.describe("404 Not Found page", () => {
   test("shows a descriptive message", async ({ page }) => {
     await page.goto("/this-page-does-not-exist");
     await expect(
-      page.getByText(/the page you are looking for does not exist/i)
+      page.getByText(/찾을 수 없는 페이지/i)
     ).toBeVisible();
   });
 
   test("Return home link navigates to home", async ({ page }) => {
     await page.goto("/this-page-does-not-exist");
-    await page.getByRole("link", { name: /return home/i }).click();
+    await page.getByRole("link", { name: /홈으로/i }).click();
     await expect(page).toHaveURL("/");
   });
 });

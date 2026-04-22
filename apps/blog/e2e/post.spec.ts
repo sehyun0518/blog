@@ -27,7 +27,7 @@ test.describe("Post detail page", () => {
 
   test("back link navigates to home", async ({ page }) => {
     await page.goto("/posts/hello-world");
-    await page.getByRole("link", { name: /back to all posts/i }).click();
+    await page.getByRole("link", { name: /전체 포스트/i }).click();
     await expect(page).toHaveURL("/");
   });
 
