@@ -12,8 +12,8 @@ export function TableOfContents({ content, className }: TableOfContentsProps) {
   if (headings.length === 0) return null;
 
   return (
-    <nav aria-label="Table of contents" className={cn("rounded-lg border border-border p-4", className)}>
-      <p className="mb-2 text-sm font-semibold text-foreground">목차</p>
+    <nav aria-labelledby="toc-heading" className={cn("rounded-lg border border-border p-4", className)}>
+      <p id="toc-heading" className="mb-2 text-sm font-semibold text-foreground">목차</p>
       <ul className="space-y-1">
         {headings.map((heading) => (
           <li key={`${heading.id}-${heading.level}`} className={heading.level === 3 ? "pl-4" : ""}>

@@ -45,8 +45,8 @@ describe("formatRelativeDate()", () => {
   it("includes suffix by default", () => {
     const past = new Date(Date.now() - 1000 * 60 * 60 * 24);
     const result = formatRelativeDate(past);
-    // Korean locale: "1일 전" (1 day ago)
-    expect(result).toMatch(/전/);
+    // Korean locale: e.g., "1일 전" (1 day ago)
+    expect(result).toMatch(/일\s*전$/);
   });
 });
 
