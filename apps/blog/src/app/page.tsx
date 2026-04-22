@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { getAllPostMeta, getAllTags } from "@/lib/posts";
+import { searchPosts } from "@/lib/search";
 import { buildBlogSchema, buildWebSiteSchema } from "@/lib/structured-data";
 import { POSTS_PER_PAGE } from "@/lib/config";
 import { PostCard } from "@/components/post-card";
@@ -25,12 +26,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     filteredPosts = filteredPosts.filter((p) => p.tags.includes(normalizedTag));
   }
   if (query) {
-    filteredPosts = filteredPosts.filter(
-      (p) =>
-        p.title.toLowerCase().includes(query) ||
-        p.description.toLowerCase().includes(query) ||
-        p.tags.some((t) => t.includes(query))
-    );
+    filteredPosts = searchPosts(filteredPosts, query);
   }
 
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
