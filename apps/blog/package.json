@@ -19,6 +19,7 @@
     "@blog/ui": "workspace:*",
     "@blog/utils": "workspace:*",
     "fuse.js": "^7.3.0",
+    "@giscus/react": "^3.1.0",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.45",
     "lucide-react": "0.511.0",
