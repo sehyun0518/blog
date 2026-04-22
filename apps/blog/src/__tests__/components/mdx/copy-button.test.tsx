@@ -18,20 +18,20 @@ function TestWrapper({ text = "const x = 1;" }: { text?: string }) {
 describe("CopyButton", () => {
   it("renders with Copy code aria-label", () => {
     render(<TestWrapper />);
-    expect(screen.getByRole("button", { name: "Copy code" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "코드 복사" })).toBeInTheDocument();
   });
 
   it("changes label to Copied after click", async () => {
     const user = userEvent.setup();
     render(<TestWrapper />);
-    await user.click(screen.getByRole("button", { name: "Copy code" }));
-    expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "코드 복사" }));
+    expect(screen.getByRole("button", { name: "복사됨" })).toBeInTheDocument();
   });
 
   it("reverts label back after timeout", async () => {
     const user = userEvent.setup({ delay: null });
     render(<TestWrapper />);
-    await user.click(screen.getByRole("button", { name: "Copy code" }));
-    expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "코드 복사" }));
+    expect(screen.getByRole("button", { name: "복사됨" })).toBeInTheDocument();
   });
 });

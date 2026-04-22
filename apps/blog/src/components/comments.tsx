@@ -11,7 +11,7 @@ export function Comments() {
   return (
     <section aria-labelledby="comments-heading" className="mt-12 border-t border-border pt-8">
       <h2 id="comments-heading" className="mb-6 text-lg font-semibold text-foreground">
-        Comments
+        댓글
       </h2>
       <GiscusWidget
         repo={giscusConfig.repo}
@@ -24,7 +24,7 @@ export function Comments() {
         emitMetadata="0"
         inputPosition="bottom"
         theme={theme}
-        lang="en"
+        lang="ko"
         loading="lazy"
       />
     </section>

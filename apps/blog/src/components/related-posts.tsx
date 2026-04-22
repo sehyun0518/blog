@@ -12,7 +12,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
     <section aria-labelledby="related-posts-heading" className="mt-12 border-t border-border pt-8">
       <h2 id="related-posts-heading" className="mb-4 text-lg font-semibold text-foreground">
-        Related Posts
+        관련 포스트
       </h2>
       <ul className="space-y-3">
         {posts.map((post) => (

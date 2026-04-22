@@ -23,3 +23,9 @@ coverage/
 
 # pnpm
 .pnpm-debug.log
+
+# Claude Code internals
+.agents/
+.claude/
+plans/
+skills-lock.json

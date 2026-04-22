@@ -1,4 +1,5 @@
 import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
+import { ko } from "date-fns/locale";
 import { z } from "zod";
 
 const DateInputSchema = z.union([
@@ -35,7 +36,7 @@ export function formatDate(input: DateInput, formatStr = "PPP"): string {
     throw new Error(`Invalid date value: ${String(input)}`);
   }
 
-  return format(date, validated);
+  return format(date, validated, { locale: ko });
 }
 
 /**
@@ -56,7 +57,7 @@ export function formatRelativeDate(
     throw new Error(`Invalid date value: ${String(input)}`);
   }
 
-  return formatDistanceToNow(date, options);
+  return formatDistanceToNow(date, { locale: ko, ...options });
 }
 
 /**

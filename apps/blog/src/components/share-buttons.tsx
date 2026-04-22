@@ -47,10 +47,10 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Share</span>
+      <span className="text-sm text-muted-foreground">공유</span>
       <button
         onClick={copyLink}
-        aria-label={copied ? "Link copied" : "Copy link"}
+        aria-label={copied ? "링크 복사됨" : "링크 복사"}
         className={cn(
           "inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
           copied && "border-green-500/50 text-green-500"
@@ -64,13 +64,13 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
       </button>
       <ShareLink
         href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
-        label="Share on Twitter"
+        label="Twitter에 공유"
       >
         <Twitter className="h-3.5 w-3.5" aria-hidden="true" />
       </ShareLink>
       <ShareLink
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-        label="Share on LinkedIn"
+        label="LinkedIn에 공유"
       >
         <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
       </ShareLink>

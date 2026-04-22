@@ -59,7 +59,7 @@ describe("LikeButton", () => {
     render(<LikeButton slug="test-post" />);
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: "Like this post" })
+        screen.getByRole("button", { name: "좋아요" })
       ).toBeInTheDocument()
     );
   });
@@ -69,7 +69,7 @@ describe("LikeButton", () => {
     render(<LikeButton slug="test-post" />);
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: "Unlike this post" })
+        screen.getByRole("button", { name: "좋아요 취소" })
       ).toBeInTheDocument()
     );
   });
@@ -85,7 +85,7 @@ describe("LikeButton", () => {
     render(<LikeButton slug="test-post" />);
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: "Like this post" })
+        screen.getByRole("button", { name: "좋아요" })
       ).toBeInTheDocument()
     );
     expect(screen.queryByText("0")).not.toBeInTheDocument();
@@ -124,7 +124,7 @@ describe("LikeButton", () => {
     render(<LikeButton slug="test-post" />);
 
     await waitFor(() =>
-      expect(screen.getByRole("button", { name: "Like this post" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "좋아요" })).toBeInTheDocument()
     );
 
     // Click — POST is unresolved, but Liked state should appear immediately
@@ -132,7 +132,7 @@ describe("LikeButton", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: "Unlike this post" })
+        screen.getByRole("button", { name: "좋아요 취소" })
       ).toBeInTheDocument()
     );
 
@@ -170,7 +170,7 @@ describe("LikeButton", () => {
     render(<LikeButton slug="test-post" />);
 
     await waitFor(() =>
-      expect(screen.getByRole("button", { name: "Like this post" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "좋아요" })).toBeInTheDocument()
     );
 
     await user.click(screen.getByRole("button"));
@@ -178,7 +178,7 @@ describe("LikeButton", () => {
     // API failed → revert to original state
     await waitFor(() =>
       expect(
-        screen.getByRole("button", { name: "Like this post" })
+        screen.getByRole("button", { name: "좋아요" })
       ).toBeInTheDocument()
     );
     expect(screen.getByText("3")).toBeInTheDocument();
@@ -195,7 +195,7 @@ describe("LikeButton", () => {
 
     await waitFor(() => expect(screen.getByText("10")).toBeInTheDocument());
     expect(
-      screen.getByRole("button", { name: "Unlike this post" })
+      screen.getByRole("button", { name: "좋아요 취소" })
     ).toBeInTheDocument();
   });
 });

@@ -115,7 +115,7 @@ export function LikeButton({ slug }: LikeButtonProps) {
   return (
     <button
       onClick={toggle}
-      aria-label={liked ? "Unlike this post" : "Like this post"}
+      aria-label={liked ? "좋아요 취소" : "좋아요"}
       aria-pressed={liked}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
@@ -129,7 +129,7 @@ export function LikeButton({ slug }: LikeButtonProps) {
         )}
         aria-hidden="true"
       />
-      <span>{liked ? "Liked" : "Like"}</span>
+      <span>좋아요</span>
       {count > 0 && (
         <span className="text-xs tabular-nums opacity-70">{count}</span>
       )}

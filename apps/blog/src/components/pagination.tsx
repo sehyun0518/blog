@@ -21,7 +21,7 @@ export function Pagination({ page, totalPages, buildHref, className }: Paginatio
       {hasPrev ? (
         <Link
           href={buildHref(page - 1)}
-          aria-label="Previous page"
+          aria-label="이전 페이지"
           className={buttonVariants({ variant: "ghost", size: "icon" })}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -42,7 +42,7 @@ export function Pagination({ page, totalPages, buildHref, className }: Paginatio
       {hasNext ? (
         <Link
           href={buildHref(page + 1)}
-          aria-label="Next page"
+          aria-label="다음 페이지"
           className={buttonVariants({ variant: "ghost", size: "icon" })}
         >
           <ChevronRight className="h-4 w-4" />

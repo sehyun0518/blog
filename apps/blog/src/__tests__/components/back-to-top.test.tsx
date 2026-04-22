@@ -29,7 +29,7 @@ describe("BackToTop", () => {
       Object.defineProperty(window, "scrollY", { value: 400, configurable: true });
       window.dispatchEvent(new Event("scroll"));
     });
-    expect(screen.getByRole("button", { name: "Back to top" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "맨 위로" })).toBeInTheDocument();
   });
 
   it("calls scrollTo on click", async () => {
@@ -39,7 +39,7 @@ describe("BackToTop", () => {
       Object.defineProperty(window, "scrollY", { value: 400, configurable: true });
       window.dispatchEvent(new Event("scroll"));
     });
-    await user.click(screen.getByRole("button", { name: "Back to top" }));
+    await user.click(screen.getByRole("button", { name: "맨 위로" }));
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });
 });
