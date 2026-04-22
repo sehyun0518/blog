@@ -1,0 +1,164 @@
+---
+title: "TypeScript Generics Deep Dive"
+date: "2026-04-20"
+description: "Conditional types, mapped types, and template literal types — the parts of TypeScript's type system that actually change how you structure code."
+tags: ["typescript", "types", "advanced"]
+---
+
+Generics are the point where TypeScript stops being a documentation layer and starts being a design tool. This post covers the three patterns I reach for most often.
+
+## Conditional Types
+
+A conditional type resolves differently depending on whether a constraint is met:
+
+```typescript
+type NonNullable<T> = T extends null | undefined ? never : T;
+```
+
+The real power comes from distributing over union types. When `T` is a union, the conditional applies to each member:
+
+```typescript
+type StringsOnly<T> = T extends string ? T : never;
+
+type Result = StringsOnly<string | number | boolean>;
+// Result = string
+```
+
+This distribution is what makes `Extract` and `Exclude` from the standard library work:
+
+```typescript
+type Extract<T, U> = T extends U ? T : never;
+type Exclude<T, U> = T extends U ? never : T;
+```
+
+### Inferring Inside Conditionals
+
+`infer` lets you capture a type within a conditional:
+
+```typescript
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+type UnwrapPromise<T> = T extends Promise<infer V> ? V : T;
+
+async function fetchUser(): Promise<{ id: string; name: string }> {
+  return { id: "1", name: "Alice" };
+}
+
+type User = UnwrapPromise<ReturnType<typeof fetchUser>>;
+// User = { id: string; name: string }
+```
+
+## Mapped Types
+
+Mapped types transform every property in an object type:
+
+```typescript
+type Readonly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+
+type Partial<T> = {
+  [K in keyof T]?: T[K];
+};
+```
+
+You can filter properties with `as` and a conditional:
+
+```typescript
+type OnlyStrings<T> = {
+  [K in keyof T as T[K] extends string ? K : never]: T[K];
+};
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+}
+
+type UserStringFields = OnlyStrings<User>;
+// { name: string; email: string }
+```
+
+### Remapping Keys
+
+The `as` clause also lets you rename keys:
+
+```typescript
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+};
+
+type UserGetters = Getters<User>;
+// { getId: () => number; getName: () => string; ... }
+```
+
+## Template Literal Types
+
+Template literal types compose string literal types the same way template literals compose strings:
+
+```typescript
+type EventName<T extends string> = `on${Capitalize<T>}`;
+
+type ClickEvent = EventName<"click">;  // "onClick"
+type FocusEvent = EventName<"focus">;  // "onFocus"
+```
+
+Combined with mapped types, this generates entire event handler shapes:
+
+```typescript
+type DOMEvents = "click" | "focus" | "blur" | "change";
+
+type EventHandlers = {
+  [E in DOMEvents as `on${Capitalize<E>}`]?: (event: Event) => void;
+};
+// { onClick?: ...; onFocus?: ...; onBlur?: ...; onChange?: ... }
+```
+
+### Parsing String Structures
+
+Template literals can also decompose strings. This is useful for route parameters:
+
+```typescript
+type ExtractParams<T extends string> =
+  T extends `${infer _Start}:${infer Param}/${infer Rest}`
+    ? Param | ExtractParams<Rest>
+    : T extends `${infer _Start}:${infer Param}`
+    ? Param
+    : never;
+
+type Params = ExtractParams<"/users/:userId/posts/:postId">;
+// "userId" | "postId"
+```
+
+## Putting It Together
+
+A realistic example: a type-safe event emitter.
+
+```typescript
+type EventMap = {
+  userCreated: { id: string; name: string };
+  orderPlaced: { orderId: string; total: number };
+  sessionExpired: void;
+};
+
+type EventPayload<T extends keyof EventMap> = EventMap[T] extends void
+  ? []
+  : [payload: EventMap[T]];
+
+interface TypedEmitter {
+  emit<E extends keyof EventMap>(event: E, ...args: EventPayload<E>): void;
+  on<E extends keyof EventMap>(
+    event: E,
+    handler: EventMap[E] extends void ? () => void : (payload: EventMap[E]) => void
+  ): void;
+}
+```
+
+The caller gets full completion and type checking for both event names and their payloads — no casting, no `any`.
+
+## When to Stop
+
+These techniques are useful when they prevent real bugs or eliminate a class of runtime errors. They become a problem when the type machinery is harder to read than the code it protects. A type that needs a comment explaining what it does has already failed at its job.
+
+The test: can a new team member read the type signature and understand the constraint without deciphering the implementation? If not, a simpler type (or a runtime check) is probably the right call.
