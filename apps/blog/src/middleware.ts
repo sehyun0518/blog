@@ -6,6 +6,11 @@ import {
   isSafeMethod,
   validateCsrfTokens,
 } from "@/lib/csrf.edge";
+import {
+  VISITOR_COOKIE_NAME,
+  VISITOR_COOKIE_MAX_AGE,
+  generateVisitorId,
+} from "@/lib/visitor";
 
 export const config = {
   matcher: [
@@ -31,5 +36,17 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+
+  if (!request.cookies.has(VISITOR_COOKIE_NAME)) {
+    response.cookies.set(VISITOR_COOKIE_NAME, generateVisitorId(), {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env["NODE_ENV"] === "production",
+      path: "/",
+      maxAge: VISITOR_COOKIE_MAX_AGE,
+    });
+  }
+
+  return response;
 }
