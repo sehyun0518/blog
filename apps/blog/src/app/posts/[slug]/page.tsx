@@ -21,8 +21,11 @@ import { PostNavigation } from "@/components/post-navigation";
 import { mdxComponents } from "@/components/mdx";
 
 const prettyCodeOptions: PrettyCodeOptions = {
-  theme: "github-dark",
-  keepBackground: true,
+  theme: {
+    light: "github-light",
+    dark: "github-dark",
+  },
+  keepBackground: false,
 };
 
 interface PostPageProps {
