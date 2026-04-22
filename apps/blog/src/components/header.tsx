@@ -2,17 +2,24 @@ import Link from "next/link";
 import { Github } from "lucide-react";
 import { siteName, githubUrl } from "@/lib/config";
 import { ThemeToggle } from "./theme-toggle";
+import { NavLink } from "./nav-link";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
-        <Link
-          href="/"
-          className="font-semibold text-foreground transition-colors hover:text-foreground/80"
-        >
-          {siteName}
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="font-semibold text-foreground transition-colors hover:text-foreground/80"
+          >
+            {siteName}
+          </Link>
+          <nav aria-label="Main navigation" className="flex items-center gap-4">
+            <NavLink href="/about">About</NavLink>
+            <NavLink href="/projects">Projects</NavLink>
+          </nav>
+        </div>
         <div className="flex items-center gap-1">
           <a
             href={githubUrl}
