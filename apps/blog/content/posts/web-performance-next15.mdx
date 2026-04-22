@@ -1,0 +1,148 @@
+---
+title: "Web Performance with Next.js 15"
+date: "2026-04-07"
+description: "Core Web Vitals in practice — how Server Components, Partial Prerendering, and the Next.js Image component change what you need to optimize."
+tags: ["performance", "nextjs", "core-web-vitals"]
+---
+
+Core Web Vitals measure three things: loading speed (LCP), interactivity (INP), and visual stability (CLS). Next.js 15 changes the baseline for all three by making Server Components the default, but it does not eliminate the need to think carefully about each metric.
+
+## LCP: Largest Contentful Paint
+
+LCP measures when the largest visible element finishes rendering. For most blogs, that is the hero image or the `<h1>`. Target: under 2.5 seconds.
+
+**Server Components help directly.** When your page renders on the server, the HTML arrives with content already in place — no client-side data fetch waterfall before the user sees text.
+
+**Images are the common LCP failure.** The Next.js `<Image>` component handles most of this automatically:
+
+```tsx
+import Image from "next/image";
+
+export function HeroImage() {
+  return (
+    <Image
+      src="/hero.jpg"
+      alt="Hero image"
+      width={1200}
+      height={630}
+      priority       // disables lazy loading for above-the-fold images
+      sizes="(max-width: 768px) 100vw, 1200px"
+    />
+  );
+}
+```
+
+The `priority` prop adds a `<link rel="preload">` tag. Use it only for the image that is your LCP candidate — adding it to every image defeats the purpose.
+
+**Font loading matters too.** `next/font` inlines font CSS and prevents layout shift:
+
+```typescript
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+```
+
+## INP: Interaction to Next Paint
+
+INP replaced FID in March 2024. It measures the latency of all interactions, not just the first one. Target: under 200ms.
+
+**Minimize the JavaScript bundle.** Every kilobyte of JS that parses on the main thread competes with user interactions.
+
+Check your bundle composition:
+
+```bash
+ANALYZE=true pnpm build
+```
+
+With `@next/bundle-analyzer` configured, this opens a treemap showing which packages contribute to each chunk.
+
+Common fixes:
+- Replace heavy libraries with smaller alternatives (e.g., `date-fns` per-function imports vs. the full bundle)
+- Use dynamic imports for components that are not needed immediately
+
+```typescript
+import dynamic from "next/dynamic";
+
+// The code editor only loads when the user clicks "Edit"
+const CodeEditor = dynamic(() => import("@/components/code-editor"), {
+  loading: () => <div>Loading editor...</div>,
+});
+```
+
+**Avoid long tasks.** Any task that takes more than 50ms blocks the main thread and degrades INP. Profiling in Chrome DevTools' Performance panel shows exactly which tasks are long and what triggered them.
+
+## CLS: Cumulative Layout Shift
+
+CLS measures unexpected layout movement. Target: under 0.1.
+
+**Reserve space for images.** Any image without explicit dimensions causes a layout shift as it loads. `next/image` requires `width` and `height` props (or `fill` with a positioned container) to reserve space:
+
+```tsx
+// fill mode — parent must have position: relative and explicit dimensions
+<div className="relative h-64 w-full">
+  <Image src={post.coverImage} alt="" fill className="object-cover" />
+</div>
+```
+
+**Avoid inserting content above existing content.** Cookie banners, notification prompts, and dynamically loaded components that appear at the top of the page shift everything below them. Load these below the fold or use reserved space.
+
+**Font swap causes CLS.** The `display: swap` setting trades invisible text for a layout shift when the web font loads. Using `next/font` with `display: optional` prevents the swap entirely by only using the web font if it is already cached.
+
+## Partial Prerendering
+
+Next.js 15's Partial Prerendering (PPR) combines static and dynamic rendering in the same route. The static shell serves from the CDN immediately; dynamic parts stream in as they resolve.
+
+```tsx
+// app/posts/[slug]/page.tsx
+import { Suspense } from "react";
+import { PostContent } from "./post-content";    // static
+import { LikeCount } from "./like-count";         // dynamic (reads from DB)
+
+export default function PostPage({ params }: { params: { slug: string } }) {
+  return (
+    <article>
+      <PostContent slug={params.slug} />
+      <Suspense fallback={<span>...</span>}>
+        <LikeCount slug={params.slug} />
+      </Suspense>
+    </article>
+  );
+}
+```
+
+The HTML that leaves the server contains the full static content plus a placeholder for the `<LikeCount>`. The like count streams in without blocking the initial render.
+
+To enable PPR:
+
+```typescript
+// next.config.ts
+export default {
+  experimental: {
+    ppr: true,
+  },
+};
+```
+
+## Measuring What You Ship
+
+Tooling for measuring:
+
+- **Lighthouse** in Chrome DevTools for local measurements
+- **`@vercel/speed-insights`** for field data in production
+- **`web-vitals`** npm package for custom reporting
+
+```typescript
+import { onLCP, onINP, onCLS } from "web-vitals";
+
+onLCP(console.log);
+onINP(console.log);
+onCLS(console.log);
+```
+
+Lab data (Lighthouse) and field data (real user measurements) often disagree — a real device on a slow network behaves differently than a simulated throttle. Both are worth tracking.
+
+The most reliable performance optimization is shipping less JavaScript. Every other technique is damage control for when you cannot.
