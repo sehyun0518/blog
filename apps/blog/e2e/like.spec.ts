@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Like button", () => {
-  test.beforeEach(async ({ page }) => {
-    // Clear localStorage so each test starts with a clean state
+  test.beforeEach(async ({ page, context }) => {
+    // Clear cookies to reset the visitor ID so liked state is always false
+    await context.clearCookies();
     await page.goto("/posts/hello-world");
-    await page.evaluate(() => localStorage.clear());
-    await page.reload();
-    await page.waitForLoadState("networkidle");
+    await page.locator("button[aria-label='Like this post']").waitFor({ state: "visible" });
   });
 
   test("is visible on post page", async ({ page }) => {
