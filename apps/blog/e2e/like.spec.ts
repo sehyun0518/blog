@@ -6,6 +6,7 @@ test.describe("Like button", () => {
     await page.goto("/posts/hello-world");
     await page.evaluate(() => localStorage.clear());
     await page.reload();
+    await page.waitForLoadState("networkidle");
   });
 
   test("is visible on post page", async ({ page }) => {

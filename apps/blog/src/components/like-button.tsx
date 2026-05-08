@@ -70,14 +70,12 @@ async function postToggle(
 }
 
 export function LikeButton({ slug }: LikeButtonProps) {
-  const [mounted, setMounted] = useState(false);
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(0);
   // Ref-based guard: prevents concurrent requests without affecting visual state.
   const inFlight = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
     fetchLikeData(slug).then((data) => {
       if (data) {
         setCount(data.count);
@@ -109,8 +107,6 @@ export function LikeButton({ slug }: LikeButtonProps) {
 
     inFlight.current = false;
   }, [liked, count, slug]);
-
-  if (!mounted) return null;
 
   return (
     <button
