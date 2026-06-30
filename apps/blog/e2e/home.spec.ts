@@ -37,7 +37,7 @@ test.describe("Home page", () => {
     page,
   }) => {
     await page.goto("/");
-    await page.getByRole("heading", { name: "Hello World" }).click();
+    await page.getByRole("link", { name: /Hello World/ }).click();
     await expect(page).toHaveURL("/posts/hello-world");
   });
 });

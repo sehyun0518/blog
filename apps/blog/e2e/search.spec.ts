@@ -16,7 +16,7 @@ test.describe("Search", () => {
 
   test("shows no posts message for unmatched query", async ({ page }) => {
     await page.goto("/?q=xyzzyxyzzy");
-    await expect(page.getByText("No posts found.")).toBeVisible();
+    await expect(page.getByText("포스트를 찾을 수 없습니다.")).toBeVisible();
   });
 
   test("fuzzy matching finds near-matches", async ({ page }) => {
