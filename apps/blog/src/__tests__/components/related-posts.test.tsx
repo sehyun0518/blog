@@ -12,7 +12,7 @@ vi.mock("@blog/utils/date", () => ({
   formatDate: (d: string) => d,
 }));
 
-import { RelatedPosts } from "@/components/related-posts";
+import { RelatedPosts } from "@/components/post";
 import type { PostMeta } from "@/types/post";
 
 function makePost(slug: string, title: string): PostMeta {

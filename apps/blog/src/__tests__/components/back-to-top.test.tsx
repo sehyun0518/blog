@@ -10,7 +10,7 @@ vi.mock("@blog/ui/button", () => ({
   buttonVariants: () => "",
 }));
 
-import { BackToTop } from "@/components/back-to-top";
+import { BackToTop } from "@/components/layout";
 
 describe("BackToTop", () => {
   beforeEach(() => {

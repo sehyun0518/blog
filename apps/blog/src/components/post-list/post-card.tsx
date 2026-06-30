@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader } from "@blog/ui/card";
 import { Badge } from "@blog/ui/badge";
 import { formatDate } from "@blog/utils/date";
-import type { PostMeta } from "../types/post";
+import type { PostMeta } from "@/types/post";
 
 interface PostCardProps {
   post: PostMeta;

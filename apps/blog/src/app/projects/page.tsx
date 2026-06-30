@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { siteName } from "@/lib/config";
 import { projects } from "@/data/projects";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project";
 
 export const metadata: Metadata = {
   title: "Projects",

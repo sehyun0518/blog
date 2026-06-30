@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
-import { ReadingProgress } from "@/components/reading-progress";
+import { ReadingProgress } from "@/components/layout";
 
 function setScrollable(scrollY: number, totalHeight: number) {
   Object.defineProperty(window, "scrollY", { value: scrollY, configurable: true });

@@ -12,7 +12,7 @@ vi.mock("@/lib/config", () => ({
   githubUrl: "https://github.com/test",
 }));
 
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/layout";
 
 describe("Footer", () => {
   it("renders copyright text with current year", () => {

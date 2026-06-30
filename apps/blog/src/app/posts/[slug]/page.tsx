@@ -12,14 +12,8 @@ import { formatDate } from "@blog/utils/date";
 import { getAllSlugs, getPostBySlug, getPrevNextPosts, getSeriesPosts, getRelatedPosts } from "@/lib/posts";
 import { buildBlogPostingSchema } from "@/lib/structured-data";
 import { siteUrl } from "@/lib/config";
-import { TableOfContents } from "@/components/toc";
-import { SeriesList } from "@/components/series-list";
-import { RelatedPosts } from "@/components/related-posts";
-import { ShareButtons } from "@/components/share-buttons";
-import { LikeButton } from "@/components/like-button";
-import { PostNavigation } from "@/components/post-navigation";
+import { TableOfContents, SeriesList, RelatedPosts, ShareButtons, LikeButton, PostNavigation, Comments } from "@/components/post";
 import { mdxComponents } from "@/components/mdx";
-import { Comments } from "@/components/comments";
 import { isGiscusEnabled } from "@/lib/config";
 
 const prettyCodeOptions: PrettyCodeOptions = {

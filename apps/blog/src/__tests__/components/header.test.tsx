@@ -18,7 +18,7 @@ vi.mock("@/lib/config", () => ({
   githubUrl: "https://github.com/test",
 }));
 
-import { Header } from "@/components/header";
+import { Header } from "@/components/layout";
 
 describe("Header", () => {
   it("renders the site name as a link to /", () => {

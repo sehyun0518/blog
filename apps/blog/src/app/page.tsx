@@ -3,10 +3,7 @@ import { getAllPostMeta, getAllTags } from "@/lib/posts";
 import { searchPosts } from "@/lib/search";
 import { buildBlogSchema, buildWebSiteSchema } from "@/lib/structured-data";
 import { POSTS_PER_PAGE } from "@/lib/config";
-import { PostCard } from "@/components/post-card";
-import { TagFilter } from "@/components/tag-filter";
-import { SearchInput } from "@/components/search-input";
-import { Pagination } from "@/components/pagination";
+import { PostCard, TagFilter, SearchInput, Pagination } from "@/components/post-list";
 
 interface HomePageProps {
   searchParams: Promise<{ tag?: string; q?: string; page?: string }>;
