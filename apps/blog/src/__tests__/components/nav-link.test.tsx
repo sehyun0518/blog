@@ -13,7 +13,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => mockUsePathname(),
 }));
 
-import { NavLink } from "@/components/nav-link";
+import { NavLink } from "@/components/layout";
 
 describe("NavLink", () => {
   it("renders link with correct href", () => {

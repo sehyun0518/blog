@@ -14,7 +14,7 @@ vi.mock("@blog/ui/badge", () => ({
   Badge: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
 }));
 
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project";
 
 const mockProject: Project = {
   id: "test",

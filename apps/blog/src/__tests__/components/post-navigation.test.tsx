@@ -8,7 +8,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-import { PostNavigation } from "@/components/post-navigation";
+import { PostNavigation } from "@/components/post";
 import type { PostMeta } from "@/types/post";
 
 const mockPost = (slug: string, title: string): PostMeta => ({

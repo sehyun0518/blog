@@ -8,7 +8,7 @@ vi.mock("next-themes", () => ({
 }));
 
 import { useTheme } from "next-themes";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/layout";
 
 describe("ThemeToggle", () => {
   const setTheme = vi.fn();

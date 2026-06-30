@@ -24,7 +24,7 @@ vi.mock("@/lib/config", () => ({
   isGiscusEnabled: () => true,
 }));
 
-import { Comments } from "@/components/comments";
+import { Comments } from "@/components/post";
 
 describe("Comments", () => {
   beforeEach(() => {

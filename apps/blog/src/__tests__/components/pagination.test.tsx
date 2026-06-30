@@ -8,7 +8,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-import { Pagination } from "@/components/pagination";
+import { Pagination } from "@/components/post-list";
 
 const buildHref = (page: number) => `/?page=${page}`;
 

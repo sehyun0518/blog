@@ -8,7 +8,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-import { SeriesList } from "@/components/series-list";
+import { SeriesList } from "@/components/post";
 import type { PostMeta } from "@/types/post";
 
 function makePost(slug: string, title: string, part: number): PostMeta {
